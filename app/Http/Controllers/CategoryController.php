@@ -9,17 +9,21 @@ use App\Actions\Categories\DestroyCategory;
 use App\Actions\Categories\UpdateCategory;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): Collection
+    public function index(): JsonResponse
     {
-        return Category::all();
+        $categories = Category::all();
+
+        return response()->json([
+            'data' => $categories
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -31,8 +35,8 @@ class CategoryController extends Controller
 
         return response()->json([
             'message' => 'Category created successfully.',
-            'data' => $category
-        ], 201);
+            'data' => [$category]
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -43,8 +47,8 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
 
         return response()->json([
-            'data' => $category
-        ]);
+            'data' => [$category]
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -57,7 +61,7 @@ class CategoryController extends Controller
         return response()->json([
             'message' => 'Category updated successfully.',
             'data' => $category
-        ]);
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -70,6 +74,6 @@ class CategoryController extends Controller
 
         return response()->json([
             'message' => 'Category deleted successfully.'
-        ], 201);
+        ], Response::HTTP_OK);
     }
 }
