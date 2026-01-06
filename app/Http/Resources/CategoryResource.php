@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Resources;
 
 use Illuminate\Http\JsonResponse;
@@ -26,7 +28,7 @@ class CategoryResource extends JsonResource
     /**
      * Customize the outgoing response for the resource.
      */
-    public function withResponse(Request $request, JsonResponse $response)
+    public function withResponse(Request $request, JsonResponse $response): void
     {
         $response->header('Content-Type', 'application/json');
     }

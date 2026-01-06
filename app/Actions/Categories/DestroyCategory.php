@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Categories;
 
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
-
 
 class DestroyCategory
 {
