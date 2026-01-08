@@ -8,9 +8,9 @@ use App\Actions\Categories\CreateCategory;
 use App\Actions\Categories\DestroyCategory;
 use App\Actions\Categories\UpdateCategory;
 use App\Http\Requests\CategoryRequest;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
-use App\Http\Resources\CategoryResource;
 use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller

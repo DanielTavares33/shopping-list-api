@@ -8,9 +8,9 @@ use App\Actions\Products\CreateProduct;
 use App\Actions\Products\DestroyProduct;
 use App\Actions\Products\UpdateProduct;
 use App\Http\Requests\ProductRequest;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
-use App\Http\Resources\ProductResource;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
@@ -20,8 +20,7 @@ class ProductController extends Controller
      */
     public function index(): JsonResponse
     {
-        $products = Product::all();
-        return ProductResource::collection($products)->response();
+        return ProductResource::collection(Product::all())->response();
     }
 
     /**
@@ -30,6 +29,7 @@ class ProductController extends Controller
     public function store(ProductRequest $productRequest, CreateProduct $createProduct): JsonResponse
     {
         $product = $createProduct->execute($productRequest->validated());
+
         return (new ProductResource($product))
             ->additional(['message' => 'Product created successfully.'])
             ->response()
@@ -41,8 +41,7 @@ class ProductController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $product = Product::findOrFail($id);
-        return (new ProductResource($product))->response();
+        return (new ProductResource(Product::findOrFail($id)))->response();
     }
 
     /**
@@ -51,6 +50,7 @@ class ProductController extends Controller
     public function update(ProductRequest $productRequest, UpdateProduct $updateProduct, string $id): JsonResponse
     {
         $product = $updateProduct->execute($productRequest->validated(), $id);
+
         return (new ProductResource($product))
             ->additional(['message' => 'Product updated successfully.'])
             ->response()
@@ -64,6 +64,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $destroyProduct->execute($product);
+
         return (new ProductResource($product))
             ->additional(['message' => 'Product deleted successfully.'])
             ->response()
