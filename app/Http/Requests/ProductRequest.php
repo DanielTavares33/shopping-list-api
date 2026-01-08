@@ -24,9 +24,9 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'default_unit' => 'nullable|max:100',
+            'name' => ['required', 'string', 'max:255'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
+            'default_unit' => ['nullable', 'string', 'max:100'],
         ];
     }
 }

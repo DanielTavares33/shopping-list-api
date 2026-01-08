@@ -16,6 +16,6 @@ class DestroyProductList
      */
     public function execute(ProductList $productList): void
     {
-        
+        $productList->delete();
     }
 }
