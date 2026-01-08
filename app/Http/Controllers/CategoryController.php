@@ -10,6 +10,7 @@ use App\Actions\Categories\UpdateCategory;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
+use App\Http\Resources\CategoryResource;
 use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller
@@ -19,11 +20,7 @@ class CategoryController extends Controller
      */
     public function index(): JsonResponse
     {
-        $categories = Category::all();
-
-        return response()->json([
-            'data' => $categories
-        ], Response::HTTP_OK);
+        return CategoryResource::collection(Category::all())->response();
     }
 
     /**
@@ -33,10 +30,10 @@ class CategoryController extends Controller
     {
         $category = $createCategory->execute($categoryRequest->validated());
 
-        return response()->json([
-            'message' => 'Category created successfully.',
-            'data' => [$category]
-        ], Response::HTTP_CREATED);
+        return (new CategoryResource($category))
+            ->additional(['message' => 'Category created successfully.'])
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -45,10 +42,8 @@ class CategoryController extends Controller
     public function show(string $id): JsonResponse
     {
         $category = Category::findOrFail($id);
-
-        return response()->json([
-            'data' => [$category]
-        ], Response::HTTP_OK);
+        // Return a single resource directly
+        return (new CategoryResource($category))->response();
     }
 
     /**
@@ -58,10 +53,10 @@ class CategoryController extends Controller
     {
         $category = $updateCategory->execute($categoryRequest->validated(), $id);
 
-        return response()->json([
-            'message' => 'Category updated successfully.',
-            'data' => $category
-        ], Response::HTTP_OK);
+        return (new CategoryResource($category))
+            ->additional(['message' => 'Category updated successfully.'])
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -72,8 +67,9 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
         $destroyCategory->execute($category);
 
-        return response()->json([
-            'message' => 'Category deleted successfully.'
-        ], Response::HTTP_OK);
+        return (new CategoryResource($category))
+            ->additional(['message' => 'Category deleted successfully.'])
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 }

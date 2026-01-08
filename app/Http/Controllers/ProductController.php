@@ -10,6 +10,7 @@ use App\Actions\Products\UpdateProduct;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
+use App\Http\Resources\ProductResource;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
@@ -20,8 +21,7 @@ class ProductController extends Controller
     public function index(): JsonResponse
     {
         $products = Product::all();
-
-        return response()->json($products, Response::HTTP_OK);
+        return ProductResource::collection($products)->response();
     }
 
     /**
@@ -30,11 +30,10 @@ class ProductController extends Controller
     public function store(ProductRequest $productRequest, CreateProduct $createProduct): JsonResponse
     {
         $product = $createProduct->execute($productRequest->validated());
-
-        return response()->json([
-            'message' => 'Product created successfully.',
-            'data' => [$product]
-        ], Response::HTTP_CREATED);
+        return (new ProductResource($product))
+            ->additional(['message' => 'Product created successfully.'])
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -43,10 +42,7 @@ class ProductController extends Controller
     public function show(string $id): JsonResponse
     {
         $product = Product::findOrFail($id);
-
-        return response()->json([
-            'data' => [$product]
-        ], Response::HTTP_OK);
+        return (new ProductResource($product))->response();
     }
 
     /**
@@ -55,11 +51,10 @@ class ProductController extends Controller
     public function update(ProductRequest $productRequest, UpdateProduct $updateProduct, string $id): JsonResponse
     {
         $product = $updateProduct->execute($productRequest->validated(), $id);
-
-        return response()->json([
-            'message' => 'Product updated successfully.',
-            'data' => [$product]
-        ], Response::HTTP_OK);
+        return (new ProductResource($product))
+            ->additional(['message' => 'Product updated successfully.'])
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -69,9 +64,9 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $destroyProduct->execute($product);
-
-        return response()->json([
-            'message' => 'Product deleted successfully.'
-        ], Response::HTTP_OK);
+        return (new ProductResource($product))
+            ->additional(['message' => 'Product deleted successfully.'])
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 }
