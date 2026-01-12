@@ -19,7 +19,7 @@ class UpdateProductList
     {
         $productList = ProductList::findOrFail($id);
         $productList->update($data);
-        
+
         return $productList;
     }
 }

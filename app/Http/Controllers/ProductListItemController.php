@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Actions\ProductListItems\CreateProductListItem;
-use App\Actions\ProductListItems\UpdateProductListItem;
 use App\Actions\ProductListItems\DestroyProductListItem;
+use App\Actions\ProductListItems\UpdateProductListItem;
 use App\Http\Requests\ProductListItemRequest;
 use App\Http\Resources\ProductListItemResource;
 use App\Models\ProductListItem;
