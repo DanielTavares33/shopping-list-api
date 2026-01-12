@@ -12,7 +12,7 @@ class ProductListItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['product_list_id', 'product_id', 'quantity', 'unit'];
+    protected $fillable = ['product_list_id', 'product_id', 'quantity', 'unit', 'is_checked'];
 
     public function productList(): BelongsTo
     {
