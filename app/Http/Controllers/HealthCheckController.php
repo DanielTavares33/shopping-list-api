@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class HealthCheckController extends Controller
 {
